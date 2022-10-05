@@ -1,0 +1,77 @@
+Changes in each release are ordered with most impactful changes on top.
+Dependency updates are automatically included with all releases.
+
+Release 2022-02:
+ - fixed issue from 2022-01 where OIDC JWT "sub" claim was wrongly required
+
+Release 2022-01:
+ - Updated Google CSE API support to v0.9 including Gmail CSE. See default properties
+     file for recommended configuration for Gmail CSE.
+ - API v0.2: email_verified not required
+ - API v0.3: JSON must be UTF encoded
+ - API v0.4: enforce maximum sizes of various input
+ - API v0.6: refer to Google product as Workspace
+ - (Gmail CSE /rewrap remains not implemented in this release)
+
+Release 2021-12
+ - `splunk-library-javalogging`, which depends on `log4j`, updated from `1.11.0`,
+        new version `1.11.1` to address recently found CVE. In FlowCrypt products,
+        splunk-library-javalogging is only used when property `logger.types` is
+        set to include `SplunkHttpLogger`.
+
+Release 2021-11:
+ - (BREAKING) previously, property api.hostname accepted an array of values and was
+        used for two purposes: server hostname and also accepted host headers. The
+        first value was used for hostname, and any value in the array would be accepted
+        for incoming host header. api.hostname no longer accepts multiple values, and
+        should only contain one value which is the host value for the server, and
+        excludes port number. To control which host headers are accepted, use a new
+        property api.accept.hosts which may be an array of values, including port numbers.
+        https://flowcrypt.com/docs/technical/enterprise/configuration/general-and-https.html
+ - (BREAKING) newly required property api.accept.hosts
+ - friendlier master key missing error
+
+Release 2021-10:
+ - exit on startup when no authenticators or authorizers configured
+
+Release 2021-09:
+ - default properties file now has master.key.source=properties
+
+Release 2021-08:
+ - **BREAKING CHANGE** support multiple authorization issuers & urls. This allows
+        for a single WKM to serve various Google Workspace products. Please see
+        included properties file for new format (section: google.workspace)
+ - **BREAKING CHANGE** support multiple authentication IdPs. This allows you to use
+        more than one Identity Provider together with our WKM. Incoming requests
+        need to be authenticated by at least one of configured IdPs. Please see
+        included properties file for new configuration format (section: authentication)
+ - a new separate build for free use under 100 users
+ - allow empty/null value for google.workspace.legal.takeout.admins
+
+Release 2021-07-RC:
+ - fixed KMIP key setup procedure
+ - enabled passing properties through sys args
+ - internal refactoring for consistency with other products
+
+Release 2021-06-RC:
+ -  log date-time instead of time, configurable with logger.file.include.datetime=true
+
+Release 2021-05-RC:
+ - fix logging bug causing {} logged instead of intended values, add tests
+
+Release 2021-04-RC:
+ - **BREAKING CHANGE** renamed --setup-master-secrets to --create-master-key
+ - implements store.master.key.source=kmip for KMS integration
+
+Release 2021-03-RC:
+ - **BREAKING CHANGE** dropped support for pbkdf2 derivation
+     -> Previously encrypted files will not be readable.
+     -> newly required property "store.master.derivation.scheme=sha256-aes-ecb"
+     -> "store.master.salt.source" and "store.master.salt.value" no longer needed
+
+Release 2021-02-RC:
+ - api.hostname accepts a comma-separated list
+
+Release 2021-01-RC:
+ - throw if authorization JWT claim "resource_name" is longer than 128 bytes
+ - project separated from EKM, restructured
